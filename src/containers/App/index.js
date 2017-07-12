@@ -11,12 +11,16 @@ class AppContainer extends Component {
     super(props)
     const { addEntry, setPending, settings } = this.props
     const excluded = settings.get("excluded").toJS()
+    var nextEntryId = 0;
     devtoolsBridge.on("publication", entry => {
       if (
         !excluded.some(e =>
           e.channel === entry.channel && (!e.topic || e.topic === entry.topic))
       ) {
-        addEntry(entry)
+        addEntry({
+          id: nextEntryId++,
+          ...entry
+        })
       }
     })
     devtoolsBridge.on("ready", () => setPending(false))

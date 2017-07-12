@@ -42,18 +42,20 @@ module.exports = {
       exclude: /node_modules/,
       loader: "babel-loader"
     }, {
-      test: /\.css$/,
-      loader: "style-loader!css-loader" + cssLoaderOptions,
-      exclude: [/flexboxgrid/, /material-design-icons/, /vis\/dist/]
+      test: /node_modules\/react-calendar-timeline.*\.js$/,
+      loader: "babel-loader"
     }, {
-      test: [/flexboxgrid\.css$/, /material-design-icons.*\.css$/, /vis\/dist.*\.css$/],
-      loader: "style-loader!css-loader"
+      test: /\.css$/,
+      loader: "style-loader!css-loader" + cssLoaderOptions
     }, {
       test: /\.(png|woff|woff2|eot|ttf|svg).*$/,
       loader: "url-loader?limit=1000000"
     }, {
       test: /\.less$/,
       loader: "style-loader!css-loader" + cssLoaderOptions + "!less-loader"
+    }, {
+      test: /\.scss$/,
+      loader: "style-loader!css-loader!sass-loader"
     }]
   },
   output: {
