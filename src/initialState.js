@@ -2,9 +2,9 @@ import { Map, List } from "immutable"
 
 export default {
   data: Map({
-    isPending: true,
+    currentTime: Date.now(),
     settings: Map({
-      followTimeline: true,
+      followMode: "present",
       splitWidth: 300,
       excluded: List([
         Map({

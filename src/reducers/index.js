@@ -1,11 +1,13 @@
 import * as addEntry from "./addEntry"
 import * as setPending from "./setPending"
-import * as setFollowTimeline from "./setFollowTimeline"
+import * as setFollowMode from "./setFollowMode"
+import * as setCurrentTime from "./setCurrentTime"
 
 const REDUCERS = [
   addEntry,
   setPending,
-  setFollowTimeline
+  setFollowMode,
+  setCurrentTime
 ]
 
 export default (state, action) => {

@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import addEntry from "../../actions/addEntry"
 import setPending from "../../actions/setPending"
-import setFollowTimeline from "../../actions/setFollowTimeline"
+import setFollowMode from "../../actions/setFollowMode"
+import setCurrentTime from "../../actions/setCurrentTime"
 import AppUI from "../../ui/views/App"
 import devtoolsBridge from "../../services/devtoolsBridge"
 
@@ -26,6 +27,16 @@ class AppContainer extends Component {
     devtoolsBridge.on("ready", () => setPending(false))
   }
 
+  componentWillMount () {
+    this.t_present = setInterval(() => {
+      this.props.setCurrentTime(Date.now())
+    }, 50)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.t_present)
+  }
+
   render () {
     return (
       <AppUI {...this.props}/>
@@ -37,10 +48,12 @@ const mapStateToProps = state => {
   const settings = state.data.get("settings")
   const isPending = state.data.get("isPending")
   const entries = state.data.get("entries")
+  const currentTime = state.data.get("currentTime")
   return {
     isPending,
     settings,
-    entries
+    entries,
+    currentTime
   }
 }
 
@@ -48,7 +61,8 @@ const mapDispatchToProps = dispatch => {
   return {
     addEntry: entry => dispatch(addEntry(entry)),
     setPending: isPending => dispatch(setPending(isPending)),
-    setFollowTimeline: follow => dispatch(setFollowTimeline(follow))
+    setFollowMode: mode => dispatch(setFollowMode(mode)),
+    setCurrentTime: timestamp => dispatch(setCurrentTime(timestamp))
   }
 }
 

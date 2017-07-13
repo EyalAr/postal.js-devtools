@@ -72,8 +72,8 @@ const App = props => {
               resizeDetector={containerResizeDetector}
               minZoom={1000}
               maxZoom={1000 * 60 * 60}
-              defaultTimeStart={moment().add(-10, "seconds")}
-              defaultTimeEnd={moment().add(10, "seconds")}/> :
+              visibleTimeStart={props.currentTime - 10000}
+              visibleTimeEnd={props.currentTime + 10000}/> :
             <div className={cx("timeline-placeholder")} style={{ left: splitWidth }}>
               Waiting for publications...
             </div>
