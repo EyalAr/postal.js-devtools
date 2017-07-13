@@ -5,12 +5,16 @@ export default {
     isPending: true,
     settings: Map({
       followTimeline: true,
+      splitWidth: 300,
       excluded: List([
         Map({
           channel: "logs"
         }),
         Map({
           channel: "postal"
+        }),
+        Map({
+          channel: "postal.request-response"
         }),
         Map({
           channel: "meeting",

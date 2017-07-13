@@ -52,7 +52,11 @@ module.exports = {
       loader: "url-loader?limit=1000000"
     }, {
       test: /\.less$/,
+      exclude: /node_modules\/react-tabs/,
       loader: "style-loader!css-loader" + cssLoaderOptions + "!less-loader"
+    }, {
+      test: /node_modules\/react-tabs.*\.less$/,
+      loader: "style-loader!css-loader!less-loader"
     }, {
       test: /\.scss$/,
       loader: "style-loader!css-loader!sass-loader"

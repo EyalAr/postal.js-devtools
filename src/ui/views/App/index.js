@@ -3,13 +3,15 @@ import classnames from "classnames/bind"
 import { fromJS } from "immutable"
 import style from "./style.less"
 import Timeline from "react-calendar-timeline"
+import containerResizeDetector from "react-calendar-timeline/lib/resize-detector/container"
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import moment from "moment"
 import { Map, Set } from "immutable"
 
 const cx = classnames.bind(style)
 
 const App = props => {
-  const entries = props.entries.map(e => ({
+  const timelineEntries = props.entries.map(e => ({
     id: e.get("id"),
     start_time: e.get("timestamp"),
     end_time: e.get("timestamp") + 500,
@@ -17,36 +19,66 @@ const App = props => {
     group: e.get("channel")
   })).toJS()
 
-  const groups = Set(
+  const chronologyEntries = props.entries.map(e => ({
+    id: e.get("id"),
+    timestamp: e.get("timestamp"),
+    title: e.get("topic"),
+    group: e.get("channel")
+  })).toJS()
+
+  const timelineGroups = Set(
     props.entries.map(e => e.get("channel"))
   ).map(g => Map({
     id: g,
     title: g
   })).toList().toJS()
 
+  const splitWidth = props.settings.get("splitWidth")
+
   return (
-    <div className={cx("container")}>
-      <div className={cx("controls-container")}>
-        <label><input type="checkbox"/> Freeze</label>&nbsp;
-        <input type="button" value="Jump to first"/>&nbsp;
-        <input type="button" value="Jump to last"/>&nbsp;
-        <input type="button" value="Reset zoom"/>&nbsp;
+    <div>
+      <div className={cx("tabs-container")} style={{ width: splitWidth }}>
+        <Tabs>
+          <TabList>
+            <Tab>Chronology</Tab>
+            <Tab>Details</Tab>
+            <Tab>Settings</Tab>
+          </TabList>
+          <TabPanel>
+            Chronology
+          </TabPanel>
+          <TabPanel>
+            Details
+          </TabPanel>
+          <TabPanel>
+            Settings
+          </TabPanel>
+        </Tabs>
       </div>
-      <Timeline
-        items={entries}
-        groups={groups}
-        fullUpdate={false}
-        canMove={false}
-        canSelect={false}
-        canResize={false}
-        canChangeGroup={false}
-        stackItems
-        showCursorLine
-        dragSnap={1}
-        minZoom={1000}
-        maxZoom={1000 * 60 * 60}
-        defaultTimeStart={Date.now() - 10000}
-        defaultTimeEnd={Date.now() + 10000}/>
+      <div className={cx("timeline-container")} style={{ marginLeft: splitWidth }}>
+        {
+          timelineEntries.length ?
+            <Timeline
+              items={timelineEntries}
+              groups={timelineGroups}
+              fullUpdate={false}
+              canMove={false}
+              canSelect={false}
+              canResize={false}
+              canChangeGroup={false}
+              stackItems={true}
+              showCursorLine
+              dragSnap={1}
+              resizeDetector={containerResizeDetector}
+              minZoom={1000}
+              maxZoom={1000 * 60 * 60}
+              defaultTimeStart={moment().add(-10, "seconds")}
+              defaultTimeEnd={moment().add(10, "seconds")}/> :
+            <div className={cx("timeline-placeholder")} style={{ left: splitWidth }}>
+              Waiting for publications...
+            </div>
+        }
+      </div>
     </div>
   )
 }
