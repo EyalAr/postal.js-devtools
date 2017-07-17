@@ -1,12 +1,14 @@
 import React from "react"
 import classnames from "classnames/bind"
-import { fromJS } from "immutable"
+import { Map, Set } from "immutable"
 import style from "./style.less"
 import Timeline from "react-calendar-timeline"
 import containerResizeDetector from "react-calendar-timeline/lib/resize-detector/container"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import moment from "moment"
-import { Map, Set } from "immutable"
+import SettingsTab from "../../tabs/Settings"
+import DetailsTab from "../../tabs/Details"
+import ChronologyTab from "../../tabs/Chronology"
 
 const cx = classnames.bind(style)
 
@@ -45,13 +47,15 @@ const App = props => {
             <Tab>Settings</Tab>
           </TabList>
           <TabPanel>
-            Chronology
+            <ChronologyTab/>
           </TabPanel>
           <TabPanel>
-            Details
+            <DetailsTab/>
           </TabPanel>
           <TabPanel>
-            Settings
+            <SettingsTab
+              settings={props.settings}
+              setSetting={props.setSetting}/>
           </TabPanel>
         </Tabs>
       </div>

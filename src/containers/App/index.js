@@ -4,13 +4,14 @@ import addEntry from "../../actions/addEntry"
 import setPending from "../../actions/setPending"
 import setFollowMode from "../../actions/setFollowMode"
 import setCurrentTime from "../../actions/setCurrentTime"
+import setSetting from "../../actions/setSetting"
 import AppUI from "../../ui/views/App"
 import devtoolsBridge from "../../services/devtoolsBridge"
 
 class AppContainer extends Component {
   constructor (props) {
     super(props)
-    const { addEntry, setPending, settings } = this.props
+    const { addEntry, setCurrentTime, setPending, settings } = this.props
     const excluded = settings.get("excluded").toJS()
     var nextEntryId = 0;
     devtoolsBridge.on("publication", entry => {
@@ -22,19 +23,39 @@ class AppContainer extends Component {
           id: nextEntryId++,
           ...entry
         })
+        if (this.props.settings.get("followMode") === "latest") {
+          setCurrentTime(+entry.timestamp)
+        }
       }
     })
     devtoolsBridge.on("ready", () => setPending(false))
   }
 
-  componentWillMount () {
-    this.t_present = setInterval(() => {
-      this.props.setCurrentTime(Date.now())
-    }, 50)
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.settings.get("followMode") === "present") {
+      if (!this.t_present) {
+        this.t_present = setInterval(() => {
+          nextProps.setCurrentTime(Date.now())
+        }, 50)
+      }
+    } else if (this.t_present) {
+      clearInterval(this.t_present)
+      delete this.t_present
+    }
+
+    if (
+      this.props.settings.get("followMode") !== "latest" &&
+      nextProps.settings.get("followMode") === "latest"
+    ) {
+      nextProps.setCurrentTime(+this.props.entries.last().get("timestamp"))
+    }
   }
 
   componentWillUnmount () {
-    clearInterval(this.t_present)
+    if (this.t_present) {
+      clearInterval(this.t_present)
+      delete this.t_present
+    }
   }
 
   render () {
@@ -57,12 +78,13 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addEntry: entry => dispatch(addEntry(entry)),
     setPending: isPending => dispatch(setPending(isPending)),
     setFollowMode: mode => dispatch(setFollowMode(mode)),
-    setCurrentTime: timestamp => dispatch(setCurrentTime(timestamp))
+    setCurrentTime: timestamp => dispatch(setCurrentTime(timestamp)),
+    setSetting: (key, value) => dispatch(setSetting(key, value))
   }
 }
 
