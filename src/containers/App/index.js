@@ -8,19 +8,21 @@ import setTimeSpan from "../../actions/setTimeSpan"
 import setSelectedTab from "../../actions/setSelectedTab"
 import setSelectedEntry from "../../actions/setSelectedEntry"
 import setSetting from "../../actions/setSetting"
+import removeFilter from "../../actions/removeFilter"
+import addFilter from "../../actions/addFilter"
+import setFilterInput from "../../actions/setFilterInput"
 import AppUI from "../../ui/views/App"
 import devtoolsBridge from "../../services/devtoolsBridge"
 
 class AppContainer extends Component {
   constructor (props) {
     super(props)
-    const { addEntry, setCurrentTime, setPending, settings } = this.props
-    const excluded = settings.get("excluded").toJS()
+    const { addEntry, setCurrentTime, setPending } = this.props
     var nextEntryId = 0;
     devtoolsBridge.on("publication", entry => {
       if (
-        !excluded.some(e =>
-          e.channel === entry.channel && (!e.topic || e.topic === entry.topic))
+        !this.props.settings.get("excluded").some(e =>
+          e.get("channel") === entry.channel && (!e.get("topic") || e.get("topic") === entry.topic))
       ) {
         addEntry({
           id: "e" + nextEntryId++,
@@ -77,6 +79,7 @@ const mapStateToProps = state => {
   const timeSpan = state.data.get("timeSpan")
   const selectedTab = state.data.get("selectedTab")
   const selectedEntry = state.data.get("selectedEntry")
+  const filterInput = state.data.get("filterInput")
   return {
     isPending,
     settings,
@@ -84,7 +87,8 @@ const mapStateToProps = state => {
     currentTime,
     timeSpan,
     selectedTab,
-    selectedEntry
+    selectedEntry,
+    filterInput
   }
 }
 
@@ -98,9 +102,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setSelectedTab: tab => dispatch(setSelectedTab(tab)),
     setSelectedEntry: id => {
       dispatch(setSelectedEntry(id))
+      dispatch(setFollowMode("none"))
       dispatch(setSelectedTab("details"))
     },
-    setSetting: (key, value) => dispatch(setSetting(key, value))
+    setSetting: (key, value) => dispatch(setSetting(key, value)),
+    removeFilter: i => dispatch(removeFilter(i)),
+    addFilter: spec => {
+      if (spec.channel || spec.topic) {
+        dispatch(addFilter(spec))
+      }
+    },
+    setFilterInput: (what, val) => dispatch(setFilterInput(what, val))
   }
 }
 

@@ -6,6 +6,10 @@ export default {
     selectedTab: "details",
     selectedEntry: undefined,
     timeSpan: 20000,
+    filterInput: Map({
+      channel: "",
+      topic: ""
+    }),
     settings: Map({
       followMode: "present",
       splitWidth: 300,

@@ -84,12 +84,18 @@ const App = props => {
                     props.setSelectedEntry(nextEntry.get("id"))
                   }
                 }}
+                setFilterInput={props.setFilterInput}
+                setSelectedTab={props.setSelectedTab}
                 timeFormat={props.settings.get("timeFormat")}/>
             </TabPanel>
             <TabPanel>
               <SettingsTab
                 settings={props.settings}
-                setSetting={props.setSetting}/>
+                filterInput={props.filterInput}
+                setSetting={props.setSetting}
+                removeFilter={props.removeFilter}
+                addFilter={props.addFilter}
+                setFilterInput={props.setFilterInput}/>
             </TabPanel>
         </Tabs>
       </div>

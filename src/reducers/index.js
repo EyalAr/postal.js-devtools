@@ -6,6 +6,9 @@ import * as setTimeSpan from "./setTimeSpan"
 import * as setSelectedTab from "./setSelectedTab"
 import * as setSelectedEntry from "./setSelectedEntry"
 import * as setSetting from "./setSetting"
+import * as removeFilter from "./removeFilter"
+import * as addFilter from "./addFilter"
+import * as setFilterInput from "./setFilterInput"
 
 const REDUCERS = [
   addEntry,
@@ -15,7 +18,10 @@ const REDUCERS = [
   setTimeSpan,
   setSelectedTab,
   setSelectedEntry,
-  setSetting
+  setSetting,
+  removeFilter,
+  addFilter,
+  setFilterInput
 ]
 
 export default (state, action) => {
