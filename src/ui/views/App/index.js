@@ -12,6 +12,12 @@ import ChronologyTab from "../../tabs/Chronology"
 
 const cx = classnames.bind(style)
 
+const tabsIndices = [
+  "chronology",
+  "details",
+  "settings"
+]
+
 const App = props => {
   const timelineEntries = props.entries.map(e => ({
     id: e.get("id"),
@@ -36,27 +42,53 @@ const App = props => {
   })).toList().toJS()
 
   const splitWidth = props.settings.get("splitWidth")
+  const selectedEntry = props.selectedEntry !== undefined &&
+    props.entries.find(e => e.get("id") === props.selectedEntry)
+  const previousEntry = selectedEntry && props.entries.find((e, i) => {
+    const next = props.entries.get(i + 1)
+    return next && next.get("id") === props.selectedEntry
+  })
+  const nextEntry = selectedEntry && props.entries.find((e, i) => {
+    const prev = props.entries.get(i - 1)
+    return prev && prev.get("id") === props.selectedEntry
+  })
 
   return (
     <div>
       <div className={cx("tabs-container")} style={{ width: splitWidth }}>
-        <Tabs>
-          <TabList>
-            <Tab>Chronology</Tab>
-            <Tab>Details</Tab>
-            <Tab>Settings</Tab>
-          </TabList>
-          <TabPanel>
-            <ChronologyTab/>
-          </TabPanel>
-          <TabPanel>
-            <DetailsTab/>
-          </TabPanel>
-          <TabPanel>
-            <SettingsTab
-              settings={props.settings}
-              setSetting={props.setSetting}/>
-          </TabPanel>
+        <Tabs
+          onSelect={i => props.setSelectedTab(tabsIndices[i])}
+          selectedIndex={tabsIndices.indexOf(props.selectedTab)}>
+            <TabList>
+              <Tab>Chronology</Tab>
+              <Tab>Details</Tab>
+              <Tab>Settings</Tab>
+            </TabList>
+            <TabPanel>
+              <ChronologyTab/>
+            </TabPanel>
+            <TabPanel>
+              <DetailsTab
+                entry={selectedEntry}
+                previous={previousEntry}
+                next={nextEntry}
+                selectPrevious={() => {
+                  if (previousEntry) {
+                    props.setSelectedEntry(previousEntry.get("id"))
+                  }
+                }}
+                selectNext={() => {
+                  if (nextEntry) {
+                    props.setSelectedEntry(nextEntry.get("id"))
+                  }
+                }}
+                timeFormat={props.settings.get("timeFormat")}/>
+            </TabPanel>
+            <TabPanel>
+              <SettingsTab
+                settings={props.settings}
+                setSetting={props.setSetting}/>
+            </TabPanel>
         </Tabs>
       </div>
       <div className={cx("timeline-container")} style={{ marginLeft: splitWidth }}>
@@ -65,9 +97,10 @@ const App = props => {
             <Timeline
               items={timelineEntries}
               groups={timelineGroups}
+              selected={[props.selectedEntry]}
+              onItemSelect={props.setSelectedEntry}
               fullUpdate={false}
               canMove={false}
-              canSelect={false}
               canResize={false}
               canChangeGroup={false}
               stackItems={true}
@@ -76,8 +109,15 @@ const App = props => {
               resizeDetector={containerResizeDetector}
               minZoom={1000}
               maxZoom={1000 * 60 * 60}
-              visibleTimeStart={props.currentTime - 10000}
-              visibleTimeEnd={props.currentTime + 10000}/> :
+              visibleTimeStart={props.currentTime - props.timeSpan / 2}
+              visibleTimeEnd={props.currentTime + props.timeSpan / 2}
+              onTimeChange={(timeStart, timeEnd) => {
+                const timeSpan = timeEnd - timeStart
+                const currentTime = timeStart + timeSpan / 2
+                props.setCurrentTime(currentTime)
+                props.setTimeSpan(timeSpan)
+                props.setFollowMode("none")
+              }}/> :
             <div className={cx("timeline-placeholder")} style={{ left: splitWidth }}>
               Waiting for publications...
             </div>

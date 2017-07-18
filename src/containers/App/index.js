@@ -4,6 +4,9 @@ import addEntry from "../../actions/addEntry"
 import setPending from "../../actions/setPending"
 import setFollowMode from "../../actions/setFollowMode"
 import setCurrentTime from "../../actions/setCurrentTime"
+import setTimeSpan from "../../actions/setTimeSpan"
+import setSelectedTab from "../../actions/setSelectedTab"
+import setSelectedEntry from "../../actions/setSelectedEntry"
 import setSetting from "../../actions/setSetting"
 import AppUI from "../../ui/views/App"
 import devtoolsBridge from "../../services/devtoolsBridge"
@@ -20,7 +23,7 @@ class AppContainer extends Component {
           e.channel === entry.channel && (!e.topic || e.topic === entry.topic))
       ) {
         addEntry({
-          id: nextEntryId++,
+          id: "e" + nextEntryId++,
           ...entry
         })
         if (this.props.settings.get("followMode") === "latest") {
@@ -70,11 +73,17 @@ const mapStateToProps = state => {
   const isPending = state.data.get("isPending")
   const entries = state.data.get("entries")
   const currentTime = state.data.get("currentTime")
+  const timeSpan = state.data.get("timeSpan")
+  const selectedTab = state.data.get("selectedTab")
+  const selectedEntry = state.data.get("selectedEntry")
   return {
     isPending,
     settings,
     entries,
-    currentTime
+    currentTime,
+    timeSpan,
+    selectedTab,
+    selectedEntry
   }
 }
 
@@ -84,6 +93,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setPending: isPending => dispatch(setPending(isPending)),
     setFollowMode: mode => dispatch(setFollowMode(mode)),
     setCurrentTime: timestamp => dispatch(setCurrentTime(timestamp)),
+    setTimeSpan: timeSpan => dispatch(setTimeSpan(timeSpan)),
+    setSelectedTab: tab => dispatch(setSelectedTab(tab)),
+    setSelectedEntry: id => {
+      dispatch(setSelectedEntry(id))
+      dispatch(setSelectedTab("details"))
+    },
     setSetting: (key, value) => dispatch(setSetting(key, value))
   }
 }

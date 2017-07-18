@@ -33,15 +33,29 @@
 
   function init (postal) {
     postal.addWireTap(function (data, env) {
-      window.postMessage({
-        __fromPostaljsDevtoolsBridge: true,
-        type: "publication",
-        data: {
-          timestamp: env.timeStamp.getTime(),
-          channel: env.channel,
-          topic: env.topic
-        }
-      }, "*");
+      try {
+        window.postMessage({
+          __fromPostaljsDevtoolsBridge: true,
+          type: "publication",
+          data: {
+            timestamp: env.timeStamp.getTime(),
+            channel: env.channel,
+            topic: env.topic,
+            data: data
+          }
+        }, "*");
+      } catch (e) {
+        window.postMessage({
+          __fromPostaljsDevtoolsBridge: true,
+          type: "publication",
+          data: {
+            timestamp: env.timeStamp.getTime(),
+            channel: env.channel,
+            topic: env.topic,
+            data: "[unserializable data]"
+          }
+        }, "*");
+      }
     });
   }
 

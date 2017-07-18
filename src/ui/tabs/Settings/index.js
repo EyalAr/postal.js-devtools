@@ -8,7 +8,7 @@ const cx = classnames.bind(style)
 const Settings = props => {
   return (
     <div>
-      <p>
+      <div>
         <div>Follow mode:</div>
         <RadioGroup
           name="followMode"
@@ -18,7 +18,7 @@ const Settings = props => {
             <Radio value="latest" />Latest
             <Radio value="none" />None
         </RadioGroup>
-      </p>
+      </div>
     </div>
   )
 }
