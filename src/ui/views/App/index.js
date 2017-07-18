@@ -5,7 +5,6 @@ import style from "./style.less"
 import Timeline from "react-calendar-timeline"
 import containerResizeDetector from "react-calendar-timeline/lib/resize-detector/container"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import moment from "moment"
 import SettingsTab from "../../tabs/Settings"
 import DetailsTab from "../../tabs/Details"
 import ChronologyTab from "../../tabs/Chronology"
@@ -30,8 +29,8 @@ const App = props => {
   const chronologyEntries = props.entries.map(e => ({
     id: e.get("id"),
     timestamp: e.get("timestamp"),
-    title: e.get("topic"),
-    group: e.get("channel")
+    topic: e.get("topic"),
+    channel: e.get("channel")
   })).toJS()
 
   const timelineGroups = Set(
@@ -49,7 +48,7 @@ const App = props => {
     return next && next.get("id") === props.selectedEntry
   })
   const nextEntry = selectedEntry && props.entries.find((e, i) => {
-    const prev = props.entries.get(i - 1)
+    const prev = i !== 0 && props.entries.get(i - 1)
     return prev && prev.get("id") === props.selectedEntry
   })
 
@@ -65,7 +64,10 @@ const App = props => {
               <Tab>Settings</Tab>
             </TabList>
             <TabPanel>
-              <ChronologyTab/>
+              <ChronologyTab
+                entries={chronologyEntries}
+                selectedEntry={props.selectedEntry}
+                setSelectedEntry={props.setSelectedEntry}/>
             </TabPanel>
             <TabPanel>
               <DetailsTab

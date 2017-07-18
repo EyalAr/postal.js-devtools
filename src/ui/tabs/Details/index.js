@@ -7,7 +7,7 @@ import humanizeDuration from "humanize-duration"
 
 const cx = classnames.bind(style)
 
-const Settings = props => {
+const Details = props => {
   return (
     props.entry ?
     <div>
@@ -41,6 +41,6 @@ const Settings = props => {
   )
 }
 
-Settings.displayName = "UI/tabs/Settings"
+Details.displayName = "UI/tabs/Details"
 
-export default Settings
+export default Details

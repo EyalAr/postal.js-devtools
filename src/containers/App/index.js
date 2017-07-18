@@ -48,7 +48,8 @@ class AppContainer extends Component {
 
     if (
       this.props.settings.get("followMode") !== "latest" &&
-      nextProps.settings.get("followMode") === "latest"
+      nextProps.settings.get("followMode") === "latest" &&
+      this.props.entries.count()
     ) {
       nextProps.setCurrentTime(+this.props.entries.last().get("timestamp"))
     }
