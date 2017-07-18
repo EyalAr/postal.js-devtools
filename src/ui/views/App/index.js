@@ -67,7 +67,7 @@ const App = props => {
               <ChronologyTab
                 entries={chronologyEntries}
                 selectedEntry={props.selectedEntry}
-                setSelectedEntry={props.setSelectedEntry}/>
+                setSelectedEntry={id => props.setSelectedEntry(id, true)}/>
             </TabPanel>
             <TabPanel>
               <DetailsTab
@@ -76,12 +76,12 @@ const App = props => {
                 next={nextEntry}
                 selectPrevious={() => {
                   if (previousEntry) {
-                    props.setSelectedEntry(previousEntry.get("id"))
+                    props.setSelectedEntry(previousEntry.get("id"), true)
                   }
                 }}
                 selectNext={() => {
                   if (nextEntry) {
-                    props.setSelectedEntry(nextEntry.get("id"))
+                    props.setSelectedEntry(nextEntry.get("id"), true)
                   }
                 }}
                 setFilterInput={props.setFilterInput}
@@ -92,21 +92,27 @@ const App = props => {
               <SettingsTab
                 settings={props.settings}
                 filterInput={props.filterInput}
+                isPaused={props.isPaused}
                 setSetting={props.setSetting}
                 removeFilter={props.removeFilter}
                 addFilter={props.addFilter}
-                setFilterInput={props.setFilterInput}/>
+                setFilterInput={props.setFilterInput}
+                setPaused={props.setPaused}/>
             </TabPanel>
         </Tabs>
       </div>
       <div className={cx("timeline-container")} style={{ marginLeft: splitWidth }}>
         {
+          !props.isReady ?
+            <div className={cx("timeline-placeholder")} style={{ left: splitWidth }}>
+              Waiting for Postal.js in host page...
+            </div> :
           timelineEntries.length ?
             <Timeline
               items={timelineEntries}
               groups={timelineGroups}
               selected={[props.selectedEntry]}
-              onItemSelect={props.setSelectedEntry}
+              onItemSelect={id => props.setSelectedEntry(id, false)}
               fullUpdate={false}
               canMove={false}
               canResize={false}

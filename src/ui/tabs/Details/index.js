@@ -34,6 +34,7 @@ const Details = props => {
             props.entry.get("timestamp")
           )
         }</div> }
+        <hr/>
         <div
           className={cx("clickable", "title")}
           onClick={() => {

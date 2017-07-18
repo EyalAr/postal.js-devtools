@@ -2,8 +2,10 @@ import { Map, List } from "immutable"
 
 export default {
   data: Map({
+    isReady: false,
+    isPaused: false,
     currentTime: Date.now(),
-    selectedTab: "details",
+    selectedTab: "chronology",
     selectedEntry: undefined,
     timeSpan: 20000,
     filterInput: Map({
@@ -16,17 +18,10 @@ export default {
       timeFormat: "HH:mm:ss.SSS",
       excluded: List([
         Map({
-          channel: "logs"
-        }),
-        Map({
           channel: "postal"
         }),
         Map({
-          channel: "postal.request-response"
-        }),
-        Map({
-          channel: "meeting",
-          topic: "USER.HEARTBEAT.LOCAL"
+          channel: "logs"
         })
       ])
     }),

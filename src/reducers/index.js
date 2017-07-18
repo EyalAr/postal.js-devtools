@@ -1,5 +1,6 @@
 import * as addEntry from "./addEntry"
-import * as setPending from "./setPending"
+import * as setPaused from "./setPaused"
+import * as setReady from "./setReady"
 import * as setFollowMode from "./setFollowMode"
 import * as setCurrentTime from "./setCurrentTime"
 import * as setTimeSpan from "./setTimeSpan"
@@ -12,7 +13,8 @@ import * as setFilterInput from "./setFilterInput"
 
 const REDUCERS = [
   addEntry,
-  setPending,
+  setPaused,
+  setReady,
   setFollowMode,
   setCurrentTime,
   setTimeSpan,

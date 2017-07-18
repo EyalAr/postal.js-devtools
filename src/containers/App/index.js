@@ -1,7 +1,8 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import addEntry from "../../actions/addEntry"
-import setPending from "../../actions/setPending"
+import setPaused from "../../actions/setPaused"
+import setReady from "../../actions/setReady"
 import setFollowMode from "../../actions/setFollowMode"
 import setCurrentTime from "../../actions/setCurrentTime"
 import setTimeSpan from "../../actions/setTimeSpan"
@@ -17,23 +18,26 @@ import devtoolsBridge from "../../services/devtoolsBridge"
 class AppContainer extends Component {
   constructor (props) {
     super(props)
-    const { addEntry, setCurrentTime, setPending } = this.props
     var nextEntryId = 0;
     devtoolsBridge.on("publication", entry => {
+      const { addEntry, setCurrentTime, isPaused, settings } = this.props
       if (
-        !this.props.settings.get("excluded").some(e =>
+        !isPaused &&
+        !settings.get("excluded").some(e =>
           e.get("channel") === entry.channel && (!e.get("topic") || e.get("topic") === entry.topic))
       ) {
         addEntry({
           id: "e" + nextEntryId++,
           ...entry
         })
-        if (this.props.settings.get("followMode") === "latest") {
+        if (settings.get("followMode") === "latest") {
           setCurrentTime(+entry.timestamp)
         }
       }
     })
-    devtoolsBridge.on("ready", () => setPending(false))
+    devtoolsBridge.once("ready", () => {
+      this.props.setReady(true)
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -73,7 +77,8 @@ class AppContainer extends Component {
 
 const mapStateToProps = state => {
   const settings = state.data.get("settings")
-  const isPending = state.data.get("isPending")
+  const isPaused = state.data.get("isPaused")
+  const isReady = state.data.get("isReady")
   const entries = state.data.get("entries")
   const currentTime = state.data.get("currentTime")
   const timeSpan = state.data.get("timeSpan")
@@ -81,7 +86,8 @@ const mapStateToProps = state => {
   const selectedEntry = state.data.get("selectedEntry")
   const filterInput = state.data.get("filterInput")
   return {
-    isPending,
+    isPaused,
+    isReady,
     settings,
     entries,
     currentTime,
@@ -95,13 +101,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addEntry: entry => dispatch(addEntry(entry)),
-    setPending: isPending => dispatch(setPending(isPending)),
+    setPaused: isPaused => dispatch(setPaused(isPaused)),
+    setReady: isReady => dispatch(setReady(isReady)),
     setFollowMode: mode => dispatch(setFollowMode(mode)),
     setCurrentTime: timestamp => dispatch(setCurrentTime(timestamp)),
     setTimeSpan: timeSpan => dispatch(setTimeSpan(timeSpan)),
     setSelectedTab: tab => dispatch(setSelectedTab(tab)),
-    setSelectedEntry: id => {
-      dispatch(setSelectedEntry(id))
+    setSelectedEntry: (id, center) => {
+      dispatch(setSelectedEntry(id, center))
       dispatch(setFollowMode("none"))
       dispatch(setSelectedTab("details"))
     },

@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
-  "Postal.js publications",
+  "Postal.js",
   "icon.png",
   "index.html",
   function(panel) {}

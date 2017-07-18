@@ -31,8 +31,9 @@ const Settings = props => {
             <Radio value="600" />Large
         </RadioGroup>
       </div>
+
       <div className={cx("setting")}>
-        <div>Timestamp format:</div>
+        <div>Timestamp format: <a target="_blank" href="https://momentjs.com/docs/#/displaying/format/">[?]</a></div>
         <input
           type="text"
           value={props.settings.get("timeFormat")}
@@ -40,7 +41,7 @@ const Settings = props => {
       </div>
 
       <div className={cx("setting")}>
-        <div>Filters:</div>
+        <div>Excluded:</div>
         <ul>
           { props.settings.get("excluded").map((f, i) => (
             <li>
@@ -60,6 +61,17 @@ const Settings = props => {
           value={props.filterInput.get("topic")}
           onChange={e => props.setFilterInput("topic", e.target.value)}/>
         <span className={cx("clickable")} onClick={() => props.addFilter(props.filterInput.toJS())}>[+]</span>
+      </div>
+
+      <div className={cx("setting")}>
+        <span
+          className={cx("clickable", {
+            alert: props.isPaused,
+            info: !props.isPaused
+          })}
+          onClick={() => props.setPaused(!props.isPaused)}>
+            {props.isPaused ? "Resume" : "Pause"}
+        </span>
       </div>
     </div>
   )

@@ -1,0 +1,17 @@
+{
+  "name": "postal-devtools",
+  "description": "Chrome Devtools extension for Postal.js",
+  "main": "connector.js",
+  "authors": [
+    "Eyal Arubas <eyalarubas@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/EyalAr/postal.js-devtools",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
