@@ -2,6 +2,7 @@
   "name": "Postal.js devtools",
   "version": "0.0.1",
   "manifest_version": 2,
+  "author": "Eyal Arubas <eyalarubas@gmail.com>",
   "devtools_page": "devtools.html",
   "background": {
     "scripts": [
