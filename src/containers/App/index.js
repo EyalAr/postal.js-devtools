@@ -25,7 +25,8 @@ class AppContainer extends Component {
       if (
         !isPaused &&
         !settings.get("excluded").some(e =>
-          e.get("channel") === entry.channel && (!e.get("topic") || e.get("topic") === entry.topic))
+          (!e.get("channel") || e.get("channel") === entry.channel) &&
+          (!e.get("topic") || e.get("topic") === entry.topic))
       ) {
         addEntry({
           id: "e" + nextEntryId++,
