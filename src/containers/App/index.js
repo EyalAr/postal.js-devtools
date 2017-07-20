@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import addEntry from "../../actions/addEntry"
+import clearEntries from "../../actions/clearEntries"
 import setPaused from "../../actions/setPaused"
 import setReady from "../../actions/setReady"
 import setFollowMode from "../../actions/setFollowMode"
@@ -35,8 +36,12 @@ class AppContainer extends Component {
         }
       }
     })
-    devtoolsBridge.once("ready", () => {
+    devtoolsBridge.on("ready", () => {
       this.props.setReady(true)
+      if (this.props.settings.get("clearOnReload")) {
+        this.props.clearEntries()
+        this.props.setFollowMode("present")
+      }
     })
   }
 
@@ -101,6 +106,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addEntry: entry => dispatch(addEntry(entry)),
+    clearEntries: () => dispatch(clearEntries()),
     setPaused: isPaused => dispatch(setPaused(isPaused)),
     setReady: isReady => dispatch(setReady(isReady)),
     setFollowMode: mode => dispatch(setFollowMode(mode)),

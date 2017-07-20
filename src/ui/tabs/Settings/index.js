@@ -41,6 +41,14 @@ const Settings = props => {
       </div>
 
       <div className={cx("setting")}>
+        <input
+          name="clearOnReload"
+          type="checkbox"
+          checked={props.settings.get("clearOnReload")}
+          onChange={e => props.setSetting("clearOnReload", e.target.checked)}/>Clear on reload
+      </div>
+
+      <div className={cx("setting")}>
         <div>Excluded:</div>
         <ul>
           { props.settings.get("excluded").map((f, i) => (
@@ -65,13 +73,16 @@ const Settings = props => {
 
       <div className={cx("setting")}>
         <span
-          className={cx("clickable", {
+          className={cx("clickable", "spaced", {
             alert: props.isPaused,
             info: !props.isPaused
           })}
           onClick={() => props.setPaused(!props.isPaused)}>
             {props.isPaused ? "Resume" : "Pause"}
         </span>
+        <span
+          className={cx("clickable", "spaced")}
+          onClick={props.clearEntries}>Clear</span>
       </div>
     </div>
   )

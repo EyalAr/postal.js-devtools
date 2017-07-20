@@ -97,7 +97,8 @@ const App = props => {
                 removeFilter={props.removeFilter}
                 addFilter={props.addFilter}
                 setFilterInput={props.setFilterInput}
-                setPaused={props.setPaused}/>
+                setPaused={props.setPaused}
+                clearEntries={props.clearEntries}/>
             </TabPanel>
         </Tabs>
       </div>

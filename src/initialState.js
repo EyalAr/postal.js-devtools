@@ -16,6 +16,7 @@ export default {
       followMode: "present",
       splitWidth: 300,
       timeFormat: "HH:mm:ss.SSS",
+      clearOnReload: true,
       excluded: List([
         Map({
           channel: "postal"

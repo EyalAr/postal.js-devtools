@@ -1,6 +1,5 @@
 (function () {
   var ATTEMPTS_INTERVAL = 500;
-  var isAppPending = false;
 
   attempt();
 
@@ -11,8 +10,6 @@
         if (data.type === "pending") {
           if (window.__postaljsDevtoolsRef) {
             notifyApp();
-          } else {
-            isAppPending = true;
           }
         }
       }
@@ -22,10 +19,7 @@
   function attempt () {
     if (window.__postaljsDevtoolsRef) {
       init(window.__postaljsDevtoolsRef);
-      if (isAppPending) {
-        isAppPending = false;
-        notifyApp();
-      }
+      notifyApp();
     } else {
       setTimeout(attempt, ATTEMPTS_INTERVAL);
     }
