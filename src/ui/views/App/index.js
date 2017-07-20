@@ -21,7 +21,7 @@ const App = props => {
   const timelineEntries = props.entries.map(e => ({
     id: e.get("id"),
     start_time: e.get("timestamp"),
-    end_time: e.get("timestamp") + 500,
+    end_time: e.get("timestamp") + props.settings.get("entrySize"),
     title: e.get("topic"),
     group: e.get("channel")
   })).toJS()

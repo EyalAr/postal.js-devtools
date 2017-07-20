@@ -41,6 +41,14 @@ const Settings = props => {
       </div>
 
       <div className={cx("setting")}>
+        <div>Entry size:</div>
+        <input
+          type="number"
+          value={props.settings.get("entrySize")}
+          onChange={e => props.setSetting("entrySize", parseInt(e.target.value))}/>
+      </div>
+
+      <div className={cx("setting")}>
         <input
           name="clearOnReload"
           type="checkbox"
