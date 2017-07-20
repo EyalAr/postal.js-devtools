@@ -19,7 +19,7 @@ import devtoolsBridge from "../../services/devtoolsBridge"
 class AppContainer extends Component {
   constructor (props) {
     super(props)
-    var nextEntryId = 0;
+    var nextEntryId = 0
     devtoolsBridge.on("publication", entry => {
       const { addEntry, setCurrentTime, isPaused, settings } = this.props
       if (
