@@ -13,12 +13,12 @@
   - or just clone this repo
 
 2. Load it in your app:
-  - `require("postal-devtools")`
-  - `import "postal-devtools"`
-  - `require([..., "postal-devtools/connector"], function () { ... })`
-  - `<script src="postal-devtools/connector.js"></script>`
+  - CJS: `require("postal-devtools")`
+  - ES2015: `import "postal-devtools"`
+  - AMD: `require(["postal-devtools/connector"], function () { ... })`
+  - 1990's: `<script src="postal-devtools/connector.js"></script>`
 
-### Install the chrome extension:
+### Install the Chrome extension:
 
 1. Download the latest [release](https://github.com/EyalAr/postal.js-devtools/releases)
 2. Unpack the zip file
