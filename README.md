@@ -16,7 +16,7 @@
   - `require("postal-devtools")`
   - `import "postal-devtools"`
   - `require([..., "postal-devtools/connector"], function () { ... })`
-  - `<script src="postal-devtools/connector"></script>`
+  - `<script src="postal-devtools/connector.js"></script>`
 
 ### Install the chrome extension:
 
