@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/EyalAr/postal.js-devtools",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
     "eventemitter2": "^4.1.0",
@@ -35,9 +35,6 @@
     "redux": "^3.7.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",
-    "vis": "^4.20.1"
-  },
-  "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-loader": "^7.1.1",
